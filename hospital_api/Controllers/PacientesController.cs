@@ -14,13 +14,25 @@ namespace hospital_api.Controllers
         private static int _proximoId = 1;
         private static readonly List<Paciente> _pacientes = new();
         private readonly ApplicationDbContext _context;
+        //Cria excepções do NIF (tem de ter 9 numeros e começar por um número de 1 a 8
+        private bool NifValido(int nif)
+        {
+            var nifStr = nif.ToString();
+            if (nifStr.Length != 9)
+                return false;
+
+            // Verifica prefixos válidos
+            var prefixo = nifStr[0];
+            return "123568".Contains(prefixo);
+        }
+
         public PacientesController(ApplicationDbContext context)
         {
             _context = context;
         }
         //para criar paciente
 
-        [HttpPost]
+        [HttpPost("CriarPaciente")]
         public IActionResult CriarPaciente([FromBody] CriarPaciente pacienteDto)
         {
             //Verifica se a data de nascimento é válida
@@ -28,6 +40,10 @@ namespace hospital_api.Controllers
             {
                 return BadRequest("A data de nascimento tem de ser inferior à data atual");
             }
+
+            //verifica se o NIF é válido
+            if (!NifValido(pacienteDto.NIF))
+                return BadRequest("O NIF fornecido não é válido");
 
             var paciente = new Paciente
             {
@@ -43,7 +59,7 @@ namespace hospital_api.Controllers
             return Ok("Paciente criado com sucesso!");
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}EditarPaciente")]
         public ActionResult <EditarPaciente> EditarPaciente(int id, [FromBody] CriarPaciente pacienteDto)
         {
             // Verifica se a data de nascimento é válida
@@ -70,8 +86,9 @@ namespace hospital_api.Controllers
 
             return Ok("Paciente editado com sucesso!");
         }
-        
-        [HttpGet("{id}")]
+
+        //Procura Pacientes por ID
+        [HttpGet("ProcurarPaciente")]
         public ActionResult <VerPaciente> ProcurarPaciente(int id)
         {
             var paciente = _pacientes.Find(p => p.Id == id);
@@ -92,5 +109,23 @@ namespace hospital_api.Controllers
 
             return Ok(pacienteVm);
         }
+        
+        //Elabora uma lista de Pacientes
+        [HttpGet("ListarPacientes")]
+        public ActionResult<List<VerPaciente>> ListarTodos()
+        {
+            var lista = _pacientes.Select(p => new VerPaciente
+            {
+                Id = p.Id,
+                Nome = p.Nome,
+                DataNascimento = p.DataNascimento,
+                Age = p.CalcularIdade(),
+                NIF = p.NIF,
+                Morada = p.Morada
+            }).ToList();
+
+            return Ok(lista);
+        }
+
     }
 }

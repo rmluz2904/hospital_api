@@ -1,6 +1,6 @@
 ﻿namespace Frontend_Form_
 {
-    partial class FormPaciente
+    partial class FormCriarPaciente
     {
         /// <summary>
         ///  Required designer variable.
@@ -33,6 +33,7 @@
             txtMorada = new TextBox();
             txtDataNascimento = new TextBox();
             btnCriarPaciente = new Button();
+            btnVerPacientes = new Button();
             SuspendLayout();
             // 
             // txtNome
@@ -76,7 +77,7 @@
             // 
             // btnCriarPaciente
             // 
-            btnCriarPaciente.Location = new Point(540, 486);
+            btnCriarPaciente.Location = new Point(347, 476);
             btnCriarPaciente.Name = "btnCriarPaciente";
             btnCriarPaciente.Size = new Size(331, 109);
             btnCriarPaciente.TabIndex = 4;
@@ -84,17 +85,28 @@
             btnCriarPaciente.UseVisualStyleBackColor = true;
             btnCriarPaciente.Click += btnCriarPaciente_Click;
             // 
-            // FormPaciente
+            // btnVerPacientes
+            // 
+            btnVerPacientes.Location = new Point(749, 476);
+            btnVerPacientes.Name = "btnVerPacientes";
+            btnVerPacientes.Size = new Size(331, 109);
+            btnVerPacientes.TabIndex = 5;
+            btnVerPacientes.Text = "Ver Paciente";
+            btnVerPacientes.UseVisualStyleBackColor = true;
+            btnVerPacientes.Click += this.btnVerPacientes_Click;
+            // 
+            // FormCriarPaciente
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1418, 769);
+            Controls.Add(btnVerPacientes);
             Controls.Add(btnCriarPaciente);
             Controls.Add(txtDataNascimento);
             Controls.Add(txtMorada);
             Controls.Add(txtNIF);
             Controls.Add(txtNome);
-            Name = "FormPaciente";
+            Name = "FormCriarPaciente";
             Text = "Paciente";
             Load += Form1_Load;
             ResumeLayout(false);
@@ -108,5 +120,6 @@
         private TextBox txtMorada;
         private TextBox txtDataNascimento;
         private Button btnCriarPaciente;
+        private Button btnVerPacientes;
     }
 }

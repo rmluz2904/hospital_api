@@ -3,9 +3,9 @@ using System.Text.Json;
 
 namespace Frontend_Form_
 {
-    public partial class FormPaciente : Form
+    public partial class FormCriarPaciente : Form
     {
-        public FormPaciente()
+        public FormCriarPaciente()
         {
             InitializeComponent();
         }
@@ -23,7 +23,7 @@ namespace Frontend_Form_
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             using var client = new HttpClient();
-            var response = await client.PostAsync("https://localhost:7179/api/Pacientes", content);
+            var response = await client.PostAsync("https://localhost:7179/api/Pacientes/CriarPaciente", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -38,6 +38,11 @@ namespace Frontend_Form_
                 var erro = await response.Content.ReadAsStringAsync();
                 MessageBox.Show($"Erro: {erro}");
             }
+        }
+        private void btnVerPacientes_Click(object sender, EventArgs e)
+        {
+            var formLista = new FormListarPacientes();
+            formLista.ShowDialog();
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
