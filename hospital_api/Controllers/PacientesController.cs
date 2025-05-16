@@ -1,5 +1,6 @@
 ﻿using hospital_api.DB;
 using hospital_api.Model;
+using hospital_api.Validações;
 using hospital_api.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,18 +15,6 @@ namespace hospital_api.Controllers
         private static int _proximoId = 1;
         private static readonly List<Paciente> _pacientes = new();
         private readonly ApplicationDbContext _context;
-        //Cria excepções do NIF (tem de ter 9 numeros e começar por um número de 1 a 8
-        private bool NifValido(int nif)
-        {
-            var nifStr = nif.ToString();
-            if (nifStr.Length != 9)
-                return false;
-
-            // Verifica prefixos válidos
-            var prefixo = nifStr[0];
-            return "123568".Contains(prefixo);
-        }
-
         public PacientesController(ApplicationDbContext context)
         {
             _context = context;
@@ -35,15 +24,11 @@ namespace hospital_api.Controllers
         [HttpPost("CriarPaciente")]
         public IActionResult CriarPaciente([FromBody] CriarPaciente pacienteDto)
         {
-            //Verifica se a data de nascimento é válida
-            if (pacienteDto.DataNascimento > DateTime.Today)
+            //Faz as verificacoes criadas
+            if (!ModelState.IsValid)
             {
-                return BadRequest("A data de nascimento tem de ser inferior à data atual");
+                return BadRequest(ModelState);
             }
-
-            //verifica se o NIF é válido
-            if (!NifValido(pacienteDto.NIF))
-                return BadRequest("O NIF fornecido não é válido");
 
             var paciente = new Paciente
             {
