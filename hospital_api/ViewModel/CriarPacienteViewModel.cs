@@ -11,6 +11,6 @@ namespace hospital_api.ViewModel
         [Required]
         public int NIF { get; set; }
         [Required]
-        public string Morada { get; set; }
+        public string Morada { get; set; } 
     }
 }
