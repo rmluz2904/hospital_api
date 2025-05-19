@@ -1,30 +1,25 @@
 ﻿using hospital_api.DB;
 using hospital_api.Model;
-using hospital_api.Validações;
 using hospital_api.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace hospital_api.Controllers
 {
-    // Isto é o controller dos pacientes
     [ApiController]
     [Route("api/[controller]")]
     public class PacientesController : ControllerBase
     {
-        private static int _pacienteId = 1;
-        private static readonly List<Paciente> _pacientes = new();
         private readonly ApplicationDbContext _context;
+
         public PacientesController(ApplicationDbContext context)
         {
             _context = context;
         }
-        //para criar paciente
 
         [HttpPost("CriarPaciente")]
-        public IActionResult CriarPaciente([FromBody] CriarPaciente pacienteDto)
+        public async Task<IActionResult> CriarPaciente([FromBody] CriarPaciente pacienteDto)
         {
-            //Faz as verificacoes criadas
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -32,51 +27,42 @@ namespace hospital_api.Controllers
 
             var paciente = new Paciente
             {
-                PacienteId = _pacienteId++,
                 Nome = pacienteDto.Nome,
                 DataNascimento = pacienteDto.DataNascimento,
                 NIF = pacienteDto.NIF,
                 Morada = pacienteDto.Morada
             };
 
-            _pacientes.Add(paciente);
+            _context.Pacientes.Add(paciente);
+            await _context.SaveChangesAsync();
 
             return Ok("Paciente criado com sucesso!");
         }
 
-        [HttpPut("{id}EditarPaciente")]
-        public ActionResult <EditarPaciente> EditarPaciente(int id, [FromBody] CriarPaciente pacienteDto)
+        [HttpPut("{id}/EditarPaciente")]
+        public async Task<IActionResult> EditarPaciente(int id, [FromBody] CriarPaciente pacienteDto)
         {
-            // Verifica se a data de nascimento é válida
-            if (pacienteDto.DataNascimento > DateTime.Today)
-            {
-                return BadRequest("A data de nascimento tem de ser inferior à data atual");
-            }
-
-            //Procura na base de dados
-            var pacienteExistente = _context.Pacientes.Find(id);
+            var pacienteExistente = await _context.Pacientes.FindAsync(id);
             if (pacienteExistente == null)
             {
                 return NotFound("Paciente não encontrado.");
             }
 
-            // Atualiza os dados do paciente
             pacienteExistente.Nome = pacienteDto.Nome;
             pacienteExistente.DataNascimento = pacienteDto.DataNascimento;
             pacienteExistente.NIF = pacienteDto.NIF;
             pacienteExistente.Morada = pacienteDto.Morada;
 
-            // Guarda as alterações
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok("Paciente editado com sucesso!");
         }
 
-        //Procura Pacientes por ID
         [HttpGet("ProcurarPaciente")]
-        public ActionResult <VerPaciente> ProcurarPaciente(int id)
+        public async Task<ActionResult<VerPaciente>> ProcurarPaciente(int id)
         {
-            var paciente = _pacientes.Find(p => p.PacienteId == id);
+            var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.PacienteId == id);
+
             if (paciente == null)
             {
                 return NotFound("Paciente não foi encontrado");
@@ -84,7 +70,6 @@ namespace hospital_api.Controllers
 
             var pacienteVm = new VerPaciente
             {
-                Id = paciente.PacienteId,
                 Nome = paciente.Nome,
                 DataNascimento = paciente.DataNascimento,
                 Age = paciente.CalcularIdade(),
@@ -94,23 +79,22 @@ namespace hospital_api.Controllers
 
             return Ok(pacienteVm);
         }
-        
-        //Elabora uma lista de Pacientes
+
         [HttpGet("ListarPacientes")]
-        public ActionResult<List<VerPaciente>> ListarTodos()
+        public async Task<ActionResult<List<VerPaciente>>> ListarTodos()
         {
-            var lista = _pacientes.Select(p => new VerPaciente
-            {
-                Id = p.PacienteId,
-                Nome = p.Nome,
-                DataNascimento = p.DataNascimento,
-                Age = p.CalcularIdade(),
-                NIF = p.NIF,
-                Morada = p.Morada
-            }).ToList();
+            var lista = await _context.Pacientes
+                .Select(p => new VerPaciente
+                {
+                    Nome = p.Nome,
+                    DataNascimento = p.DataNascimento,
+                    Age = p.CalcularIdade(),
+                    NIF = p.NIF,
+                    Morada = p.Morada
+                })
+                .ToListAsync();
 
             return Ok(lista);
         }
-
     }
 }

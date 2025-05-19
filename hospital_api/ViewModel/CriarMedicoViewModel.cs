@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace hospital_api.ViewModel
 {
-    public class CriarMedicoViewModel
+    public class CriarMedico
     {
         [Required]
         public int NumeroMecanografico { get; set; }

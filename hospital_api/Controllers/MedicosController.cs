@@ -11,8 +11,6 @@ namespace hospital_api.Controllers
     [Route("api/[controller]")]
     public class MedicosController : ControllerBase
     {
-        private static int _MedicoId = 1;
-        private static readonly List<Medico> _medicos = new();
         private readonly ApplicationDbContext _context;
 
         public MedicosController(ApplicationDbContext context)
@@ -21,26 +19,54 @@ namespace hospital_api.Controllers
         }
 
         [HttpPost("CriarMedico")]
-        public IActionResult CriarMedico(CriarMedicoViewModel medicoDto)
+        public async Task<IActionResult> CriarMedico(CriarMedico medicoDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var medico = new Medico
             {
-                MedicoId = _MedicoId++,
                 NumeroOrdemMedicos = medicoDto.NumeroOrdemMedicos,
                 NumeroMecanografico = medicoDto.NumeroMecanografico,
                 NomeProfissionalSaude = medicoDto.NomeProfissionalSaude,
                 Especialidade = medicoDto.Especialidade,
                 Hospital = medicoDto.Hospital
             };
-
-            _medicos.Add(medico);
+            //adicao a base de dados
+            _context.Medicos.Add(medico);
+            await _context.SaveChangesAsync();
 
             return Ok("Médico criado com sucesso!");
         }
-        [HttpGet("ProcurarMedico")]
-        public ActionResult<VerMedico> ProcurarMedico(int idMedico)
+
+        [HttpPut("{id}/EditarMedico")]
+        public async Task<IActionResult> EditarMedico(int id, [FromBody] CriarMedico medicoDto)
         {
-            var medico = _medicos.Find(m => m.MedicoId == idMedico);
+            var medicoExistente = await _context.Medicos.FindAsync(id);
+            if (medicoExistente == null)
+            {
+                return NotFound("Médico não encontrado.");
+            }
+
+            medicoExistente.NumeroOrdemMedicos = medicoDto.NumeroOrdemMedicos;
+            medicoExistente.NumeroMecanografico = medicoDto.NumeroMecanografico;
+            medicoExistente.NomeProfissionalSaude = medicoDto.NomeProfissionalSaude;
+            medicoExistente.Especialidade = medicoDto.Especialidade;
+            medicoExistente.Hospital = medicoDto.Hospital;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Médico editado com sucesso!");
+        }
+
+        [HttpGet("ProcurarMedico")]
+        public async Task<ActionResult<VerMedico>> ProcurarMedico(int idMedico)
+        {
+            var medico = await _context.Medicos
+                .FirstOrDefaultAsync(m => m.MedicoId == idMedico);
+
             if (medico == null)
             {
                 return NotFound("Médico não foi encontrado");
@@ -48,7 +74,6 @@ namespace hospital_api.Controllers
 
             var medicoVm = new VerMedico
             {
-                IdMedico = medico.MedicoId,
                 NumeroOrdemMedicos = medico.NumeroOrdemMedicos,
                 NumeroMecanografico = medico.NumeroMecanografico,
                 NomeProfissionalSaude = medico.NomeProfissionalSaude,
