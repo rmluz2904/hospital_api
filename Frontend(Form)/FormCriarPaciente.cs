@@ -76,7 +76,7 @@ namespace Frontend_Form_
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void FormCriarPaciente_Load(object sender, EventArgs e)
         {
 
         }

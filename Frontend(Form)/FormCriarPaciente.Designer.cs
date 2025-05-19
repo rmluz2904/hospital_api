@@ -613,7 +613,7 @@
             MainMenuStrip = menuStrip1;
             Name = "FormCriarPaciente";
             Text = "Paciente";
-            Load += Form1_Load;
+            Load += FormCriarPaciente_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();

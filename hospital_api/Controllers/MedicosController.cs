@@ -1,4 +1,5 @@
-﻿using hospital_api.DB;
+﻿using hospital_api.Data;
+using hospital_api.DB;
 using hospital_api.Model;
 using hospital_api.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -57,5 +58,11 @@ namespace hospital_api.Controllers
 
             return Ok(medicoVm);
         }
+        [HttpGet("Especialidades")]
+        public IActionResult ObterEspecialidades()
+        {
+            return Ok(Especialidades.ListaEspecialidades);
+        }
+
     }
 }
