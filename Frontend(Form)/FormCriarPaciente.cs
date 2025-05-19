@@ -106,5 +106,11 @@ namespace Frontend_Form_
         {
 
         }
+
+        private void sobreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormSobre modal = new FormSobre();
+            modal.ShowDialog();
+        }
     }
 }

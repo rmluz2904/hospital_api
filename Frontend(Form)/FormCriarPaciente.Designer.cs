@@ -37,7 +37,7 @@
             btnVerPacientes = new Button();
             menuStrip1 = new MenuStrip();
             arquivoToolStripMenuItem = new ToolStripMenuItem();
-            sobreOConcordioBaseToolStripMenuItem = new ToolStripMenuItem();
+            sobreToolStripMenuItem = new ToolStripMenuItem();
             opçõesToolStripMenuItem = new ToolStripMenuItem();
             sairToolStripMenuItem = new ToolStripMenuItem();
             registosToolStripMenuItem = new ToolStripMenuItem();
@@ -182,7 +182,7 @@
             // 
             arquivoToolStripMenuItem.BackColor = Color.FromArgb(255, 224, 192);
             arquivoToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            arquivoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sobreOConcordioBaseToolStripMenuItem, opçõesToolStripMenuItem, sairToolStripMenuItem });
+            arquivoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sobreToolStripMenuItem, opçõesToolStripMenuItem, sairToolStripMenuItem });
             arquivoToolStripMenuItem.Font = new Font("Segoe UI", 9F);
             arquivoToolStripMenuItem.ForeColor = Color.Black;
             arquivoToolStripMenuItem.ImageTransparentColor = Color.White;
@@ -191,22 +191,23 @@
             arquivoToolStripMenuItem.Text = "Arquivo";
             arquivoToolStripMenuItem.Click += arquivoToolStripMenuItem_Click;
             // 
-            // sobreOConcordioBaseToolStripMenuItem
+            // sobreToolStripMenuItem
             // 
-            sobreOConcordioBaseToolStripMenuItem.Name = "sobreOConcordioBaseToolStripMenuItem";
-            sobreOConcordioBaseToolStripMenuItem.Size = new Size(301, 34);
-            sobreOConcordioBaseToolStripMenuItem.Text = "Sobre o ConcordioBase";
+            sobreToolStripMenuItem.Name = "sobreToolStripMenuItem";
+            sobreToolStripMenuItem.Size = new Size(270, 34);
+            sobreToolStripMenuItem.Text = "Sobre o SGH RL";
+            sobreToolStripMenuItem.Click += sobreToolStripMenuItem_Click;
             // 
             // opçõesToolStripMenuItem
             // 
             opçõesToolStripMenuItem.Name = "opçõesToolStripMenuItem";
-            opçõesToolStripMenuItem.Size = new Size(301, 34);
+            opçõesToolStripMenuItem.Size = new Size(270, 34);
             opçõesToolStripMenuItem.Text = "Opções";
             // 
             // sairToolStripMenuItem
             // 
             sairToolStripMenuItem.Name = "sairToolStripMenuItem";
-            sairToolStripMenuItem.Size = new Size(301, 34);
+            sairToolStripMenuItem.Size = new Size(270, 34);
             sairToolStripMenuItem.Text = "Sair";
             sairToolStripMenuItem.Click += sairToolStripMenuItem_Click;
             // 
@@ -632,7 +633,7 @@
         private Button btnVerPacientes;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem arquivoToolStripMenuItem;
-        private ToolStripMenuItem sobreOConcordioBaseToolStripMenuItem;
+        private ToolStripMenuItem sobreToolStripMenuItem;
         private ToolStripMenuItem opçõesToolStripMenuItem;
         private ToolStripMenuItem sairToolStripMenuItem;
         private ToolStripMenuItem registosToolStripMenuItem;
