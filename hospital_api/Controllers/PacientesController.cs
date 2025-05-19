@@ -12,7 +12,7 @@ namespace hospital_api.Controllers
     [Route("api/[controller]")]
     public class PacientesController : ControllerBase
     {
-        private static int _proximoId = 1;
+        private static int _pacienteId = 1;
         private static readonly List<Paciente> _pacientes = new();
         private readonly ApplicationDbContext _context;
         public PacientesController(ApplicationDbContext context)
@@ -32,7 +32,7 @@ namespace hospital_api.Controllers
 
             var paciente = new Paciente
             {
-                Id = _proximoId++,
+                PacienteId = _pacienteId++,
                 Nome = pacienteDto.Nome,
                 DataNascimento = pacienteDto.DataNascimento,
                 NIF = pacienteDto.NIF,
@@ -76,7 +76,7 @@ namespace hospital_api.Controllers
         [HttpGet("ProcurarPaciente")]
         public ActionResult <VerPaciente> ProcurarPaciente(int id)
         {
-            var paciente = _pacientes.Find(p => p.Id == id);
+            var paciente = _pacientes.Find(p => p.PacienteId == id);
             if (paciente == null)
             {
                 return NotFound("Paciente não foi encontrado");
@@ -84,7 +84,7 @@ namespace hospital_api.Controllers
 
             var pacienteVm = new VerPaciente
             {
-                Id = paciente.Id,
+                Id = paciente.PacienteId,
                 Nome = paciente.Nome,
                 DataNascimento = paciente.DataNascimento,
                 Age = paciente.CalcularIdade(),
@@ -101,7 +101,7 @@ namespace hospital_api.Controllers
         {
             var lista = _pacientes.Select(p => new VerPaciente
             {
-                Id = p.Id,
+                Id = p.PacienteId,
                 Nome = p.Nome,
                 DataNascimento = p.DataNascimento,
                 Age = p.CalcularIdade(),

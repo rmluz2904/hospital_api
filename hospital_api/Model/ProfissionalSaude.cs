@@ -2,6 +2,7 @@
 {
     public class ProfissionalSaude
     {     
+            public int ProfissionalSaudeId { get; set; }
             public int NumeroMecanografico { get; set; }
             public string NomeProfissionalSaude { get; set; }
             public string Especialidade { get; set; }

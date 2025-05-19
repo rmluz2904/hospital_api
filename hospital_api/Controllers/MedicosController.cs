@@ -11,7 +11,7 @@ namespace hospital_api.Controllers
     [Route("api/[controller]")]
     public class MedicosController : ControllerBase
     {
-        private static int _IdMedico = 1;
+        private static int _MedicoId = 1;
         private static readonly List<Medico> _medicos = new();
         private readonly ApplicationDbContext _context;
 
@@ -25,7 +25,7 @@ namespace hospital_api.Controllers
         {
             var medico = new Medico
             {
-                IdMedico = _IdMedico++,
+                MedicoId = _MedicoId++,
                 NumeroOrdemMedicos = medicoDto.NumeroOrdemMedicos,
                 NumeroMecanografico = medicoDto.NumeroMecanografico,
                 NomeProfissionalSaude = medicoDto.NomeProfissionalSaude,
@@ -40,7 +40,7 @@ namespace hospital_api.Controllers
         [HttpGet("ProcurarMedico")]
         public ActionResult<VerMedico> ProcurarMedico(int idMedico)
         {
-            var medico = _medicos.Find(m => m.IdMedico == idMedico);
+            var medico = _medicos.Find(m => m.MedicoId == idMedico);
             if (medico == null)
             {
                 return NotFound("Médico não foi encontrado");
@@ -48,7 +48,7 @@ namespace hospital_api.Controllers
 
             var medicoVm = new VerMedico
             {
-                IdMedico = medico.IdMedico,
+                IdMedico = medico.MedicoId,
                 NumeroOrdemMedicos = medico.NumeroOrdemMedicos,
                 NumeroMecanografico = medico.NumeroMecanografico,
                 NomeProfissionalSaude = medico.NomeProfissionalSaude,
