@@ -13,7 +13,7 @@ namespace hospital_api.DB
         public DbSet<Enfermeiro> Enfermeiros { get; set; }
         public DbSet<Hospital> Hospitais { get; set; }
         public DbSet<ProfissionalSaude> ProfissionaisSaude { get; set; }
-
+        public DbSet<Especialidade> Especialidades { get; set; }
     }
 
 }

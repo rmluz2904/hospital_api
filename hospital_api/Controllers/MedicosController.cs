@@ -1,5 +1,4 @@
-﻿using hospital_api.Data;
-using hospital_api.DB;
+﻿using hospital_api.DB;
 using hospital_api.Model;
 using hospital_api.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -19,22 +18,25 @@ namespace hospital_api.Controllers
         }
 
         [HttpPost("CriarMedico")]
-        public async Task<IActionResult> CriarMedico(CriarMedico medicoDto)
+        public async Task<IActionResult> CriarMedico([FromBody] CriarMedico medicoDto)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
+
+            // Verifica se a especialidade existe
+            var especialidade = await _context.Especialidades.FindAsync(medicoDto.EspecialidadeId);
+            if (especialidade == null)
+                return BadRequest("Especialidade inválida.");
 
             var medico = new Medico
             {
                 NumeroOrdemMedicos = medicoDto.NumeroOrdemMedicos,
                 NumeroMecanografico = medicoDto.NumeroMecanografico,
                 NomeProfissionalSaude = medicoDto.NomeProfissionalSaude,
-                Especialidade = medicoDto.Especialidade,
+                EspecialidadeId = medicoDto.EspecialidadeId,
                 Hospital = medicoDto.Hospital
             };
-            //adicao a base de dados
+
             _context.Medicos.Add(medico);
             await _context.SaveChangesAsync();
 
@@ -44,17 +46,22 @@ namespace hospital_api.Controllers
         [HttpPut("{id}/EditarMedico")]
         public async Task<IActionResult> EditarMedico(int id, [FromBody] CriarMedico medicoDto)
         {
-            var medicoExistente = await _context.Medicos.FindAsync(id);
-            if (medicoExistente == null)
-            {
-                return NotFound("Médico não encontrado.");
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            medicoExistente.NumeroOrdemMedicos = medicoDto.NumeroOrdemMedicos;
-            medicoExistente.NumeroMecanografico = medicoDto.NumeroMecanografico;
-            medicoExistente.NomeProfissionalSaude = medicoDto.NomeProfissionalSaude;
-            medicoExistente.Especialidade = medicoDto.Especialidade;
-            medicoExistente.Hospital = medicoDto.Hospital;
+            var medico = await _context.Medicos.FindAsync(id);
+            if (medico == null)
+                return NotFound("Médico não encontrado.");
+
+            var especialidade = await _context.Especialidades.FindAsync(medicoDto.EspecialidadeId);
+            if (especialidade == null)
+                return BadRequest("Especialidade inválida.");
+
+            medico.NumeroOrdemMedicos = medicoDto.NumeroOrdemMedicos;
+            medico.NumeroMecanografico = medicoDto.NumeroMecanografico;
+            medico.NomeProfissionalSaude = medicoDto.NomeProfissionalSaude;
+            medico.EspecialidadeId = medicoDto.EspecialidadeId;
+            medico.Hospital = medicoDto.Hospital;
 
             await _context.SaveChangesAsync();
 
@@ -65,29 +72,22 @@ namespace hospital_api.Controllers
         public async Task<ActionResult<VerMedico>> ProcurarMedico(int idMedico)
         {
             var medico = await _context.Medicos
+                .Include(m => m.Especialidade)
                 .FirstOrDefaultAsync(m => m.MedicoId == idMedico);
 
             if (medico == null)
-            {
                 return NotFound("Médico não foi encontrado");
-            }
 
             var medicoVm = new VerMedico
             {
                 NumeroOrdemMedicos = medico.NumeroOrdemMedicos,
                 NumeroMecanografico = medico.NumeroMecanografico,
                 NomeProfissionalSaude = medico.NomeProfissionalSaude,
-                Especialidade = medico.Especialidade,
+                EspecialidadeNome = medico.Especialidade.Nome,
                 Hospital = medico.Hospital
             };
 
             return Ok(medicoVm);
         }
-        [HttpGet("Especialidades")]
-        public IActionResult ObterEspecialidades()
-        {
-            return Ok(Especialidades.ListaEspecialidades);
-        }
-
     }
 }

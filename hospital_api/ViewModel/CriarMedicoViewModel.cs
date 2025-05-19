@@ -10,7 +10,7 @@ namespace hospital_api.ViewModel
         [Required]
         public string NomeProfissionalSaude { get; set; }
         [Required]
-        public string Especialidade { get; set; }
+        public int EspecialidadeId { get; set; }
         [Required]
         public string Hospital { get; set; }
         [Required]
