@@ -8,7 +8,7 @@ namespace hospital_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MedicosController : ControllerBase
+    public class MedicosController : Controller
     {
         private readonly ApplicationDbContext _context;
 

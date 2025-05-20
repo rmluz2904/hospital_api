@@ -194,20 +194,20 @@
             // sobreToolStripMenuItem
             // 
             sobreToolStripMenuItem.Name = "sobreToolStripMenuItem";
-            sobreToolStripMenuItem.Size = new Size(270, 34);
+            sobreToolStripMenuItem.Size = new Size(241, 34);
             sobreToolStripMenuItem.Text = "Sobre o SGH RL";
             sobreToolStripMenuItem.Click += sobreToolStripMenuItem_Click;
             // 
             // opçõesToolStripMenuItem
             // 
             opçõesToolStripMenuItem.Name = "opçõesToolStripMenuItem";
-            opçõesToolStripMenuItem.Size = new Size(270, 34);
+            opçõesToolStripMenuItem.Size = new Size(241, 34);
             opçõesToolStripMenuItem.Text = "Opções";
             // 
             // sairToolStripMenuItem
             // 
             sairToolStripMenuItem.Name = "sairToolStripMenuItem";
-            sairToolStripMenuItem.Size = new Size(270, 34);
+            sairToolStripMenuItem.Size = new Size(241, 34);
             sairToolStripMenuItem.Text = "Sair";
             sairToolStripMenuItem.Click += sairToolStripMenuItem_Click;
             // 

@@ -14,6 +14,6 @@
             if (DataNascimento.Date > hoje.AddYears(-idade)) idade--;
             return idade;
         }
-
+        public virtual ICollection<Consulta> Consultas { get; set; }
     }
 }

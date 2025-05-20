@@ -14,6 +14,7 @@ namespace hospital_api.DB
         public DbSet<Hospital> Hospitais { get; set; }
         public DbSet<ProfissionalSaude> ProfissionaisSaude { get; set; }
         public DbSet<Especialidade> Especialidades { get; set; }
+        public DbSet <Consulta> Consultas { get; set; }
     }
 
 }

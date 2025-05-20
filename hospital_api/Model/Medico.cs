@@ -8,5 +8,6 @@ namespace hospital_api.Model
     {
         public int MedicoId { get; set; }
         public int NumeroOrdemMedicos { get; set; }
+        public virtual ICollection<Consulta> Consultas { get; set; }
     }
 }
